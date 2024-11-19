@@ -2,6 +2,8 @@ package com.example.demo.Models;
 
 import java.io.Serializable;
 
+import com.example.demo.Validators.UniqueUsername;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.NotEmpty;
 @MappedSuperclass
 public class Account implements Serializable {
 
+    @UniqueUsername(message = "Username already exists")
     @NotEmpty(message = "Username is required")
     @Column(length = 50, unique = true)
     private String username;

@@ -1,5 +1,7 @@
 package com.example.demo.Services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,11 @@ public class FoodRecordService {
     }
 
     public FoodRecord findById(Long id) {
-        return foodRecordRepository.findById(id).get();
+        Optional<FoodRecord> foodRecord = foodRecordRepository.findById(id);
+        if (!foodRecord.isPresent()) {
+            return null;
+        }
+        return foodRecord.get();
     }
 
     public Iterable<FoodRecord> findAll() {

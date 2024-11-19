@@ -1,5 +1,7 @@
 package com.example.demo.Services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,11 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).get();
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            return null;
+        }
+        return user.get();
     }
 
     public Iterable<User> findAll() {
