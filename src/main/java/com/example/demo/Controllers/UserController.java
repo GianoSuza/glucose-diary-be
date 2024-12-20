@@ -27,23 +27,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
-        ResponseData<User> responseData = new ResponseData<>();
-
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                responseData.getMessage().add(error.getDefaultMessage());
-            }
-            responseData.setStatus(false);
-            responseData.setPayload(null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-        }
-
-        responseData.setStatus(true);
-        responseData.setPayload(userService.create(user));
-        return ResponseEntity.ok(responseData);
-    }
+//    @PostMapping
+//    public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
+//        ResponseData<User> responseData = new ResponseData<>();
+//
+//        if (errors.hasErrors()) {
+//            for (ObjectError error : errors.getAllErrors()) {
+//                responseData.getMessage().add(error.getDefaultMessage());
+//            }
+//            responseData.setStatus(false);
+//            responseData.setPayload(null);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+//        }
+//
+//        responseData.setStatus(true);
+//        responseData.setPayload(userService.create(user));
+//        return ResponseEntity.ok(responseData);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseData<User>> update(@Valid @RequestBody User user, @PathVariable Long id,
