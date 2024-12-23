@@ -25,6 +25,7 @@ public class FoodService {
                 .map(Food -> {
                     Food.setName(newFood.getName());
                     Food.setSugarLevel(newFood.getSugarLevel());
+                    Food.setImages(newFood.getImages());
                     return foodRepository.save(Food);
                 })
                 .orElseGet(() -> {

@@ -1,5 +1,7 @@
 package com.example.demo.Services;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +53,12 @@ public class FoodRecordService {
 
     public void removeAll() {
         foodRecordRepository.deleteAll();
+    }
+
+    public List<FoodRecord> getWeekData() {
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = endDate.minusDays(7);
+
+        return foodRecordRepository.findAllFromLastWeek(startDate, endDate);
     }
 }

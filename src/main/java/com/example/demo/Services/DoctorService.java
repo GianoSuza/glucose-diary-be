@@ -25,6 +25,7 @@ public class DoctorService {
                     doctor.setEmail(newDoctor.getEmail());
                     doctor.setSpeciality(newDoctor.getSpeciality());
                     doctor.setPracticeDay(newDoctor.getPracticeDay());
+                    doctor.setImages(newDoctor.getImages());
                     return doctorRepository.save(doctor);
                 })
                 .orElseGet(() -> {
