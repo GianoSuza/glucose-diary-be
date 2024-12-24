@@ -38,11 +38,11 @@ public class Food implements Serializable {
     public Food() {
     }
 
-    public Long getFoodID() {
+    public Long getfoodID() {
         return foodID;
     }
 
-    public void setFoodID(Long foodID) {
+    public void setfoodID(Long foodID) {
         this.foodID = foodID;
     }
 

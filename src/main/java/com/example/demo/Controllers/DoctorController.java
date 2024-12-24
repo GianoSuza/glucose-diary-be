@@ -67,16 +67,16 @@ public class DoctorController {
     public ResponseEntity<ResponseData<Doctor>> findById(@PathVariable("id") Long id) {
         ResponseData<Doctor> responseData = new ResponseData<>();
 
-        Doctor doctor = doctorService.findById(id); // Call the service to find the user
+        Doctor doctor = doctorService.findById(id);
         if (doctor == null) {
             responseData.setStatus(false);
-            responseData.getMessage().add("Doctor not found"); // Add a custom message
+            responseData.getMessage().add("Doctor not found");
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         }
 
         responseData.setStatus(true);
-        responseData.getMessage().add("Doctor found successfully"); // Optional success message
+        responseData.getMessage().add("Doctor found successfully");
         responseData.setPayload(doctor);
         return ResponseEntity.ok(responseData);
     }

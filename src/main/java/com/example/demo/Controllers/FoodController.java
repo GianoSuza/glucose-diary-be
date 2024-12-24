@@ -67,16 +67,16 @@ public class FoodController {
     public ResponseEntity<ResponseData<Food>> findById(@PathVariable("id") Long id) {
         ResponseData<Food> responseData = new ResponseData<>();
 
-        Food food = foodService.findById(id); // Call the service to find the user
+        Food food = foodService.findById(id);
         if (food == null) {
             responseData.setStatus(false);
-            responseData.getMessage().add("Food not found"); // Add a custom message
+            responseData.getMessage().add("Food not found");
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         }
 
         responseData.setStatus(true);
-        responseData.getMessage().add("Food found successfully"); // Optional success message
+        responseData.getMessage().add("Food found successfully");
         responseData.setPayload(food);
         return ResponseEntity.ok(responseData);
     }

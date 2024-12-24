@@ -13,6 +13,7 @@ import com.example.demo.Services.FoodRecordService;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -117,5 +118,22 @@ public class FoodRecordController {
         responseData.setStatus(true);
         responseData.getMessage().add("All food records deleted successfully");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+    }
+
+    @GetMapping("/week-data")
+    public ResponseEntity<ResponseData<List<FoodRecord>>> getWeekData() {
+        ResponseData<List<FoodRecord>> responseData = new ResponseData<>();
+
+        try {
+            List<FoodRecord> foodRecords = foodRecordService.getWeekData();
+            responseData.setStatus(true);
+            responseData.setPayload(foodRecords);
+            responseData.getMessage().add("Data from the past week retrieved successfully");
+            return ResponseEntity.ok(responseData);
+        } catch (Exception e) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Failed to retrieve data from the past week");
+            return ResponseEntity.status(500).body(responseData);
+        }
     }
 }

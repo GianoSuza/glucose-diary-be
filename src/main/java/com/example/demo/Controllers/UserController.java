@@ -68,16 +68,16 @@ public class UserController {
     public ResponseEntity<ResponseData<User>> findById(@PathVariable("id") Long id) {
         ResponseData<User> responseData = new ResponseData<>();
 
-        User user = userService.findById(id); // Call the service to find the user
+        User user = userService.findById(id);
         if (user == null) {
             responseData.setStatus(false);
-            responseData.getMessage().add("User not found"); // Add a custom message
+            responseData.getMessage().add("User not found");
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.OK).body(responseData);
         }
 
         responseData.setStatus(true);
-        responseData.getMessage().add("User found successfully"); // Optional success message
+        responseData.getMessage().add("User found successfully");
         responseData.setPayload(user);
         return ResponseEntity.ok(responseData);
     }
