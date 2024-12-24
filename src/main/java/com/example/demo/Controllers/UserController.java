@@ -14,11 +14,11 @@ import com.example.demo.Services.UserService;
 
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -27,23 +27,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping
-//    public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
-//        ResponseData<User> responseData = new ResponseData<>();
-//
-//        if (errors.hasErrors()) {
-//            for (ObjectError error : errors.getAllErrors()) {
-//                responseData.getMessage().add(error.getDefaultMessage());
-//            }
-//            responseData.setStatus(false);
-//            responseData.setPayload(null);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-//        }
-//
-//        responseData.setStatus(true);
-//        responseData.setPayload(userService.create(user));
-//        return ResponseEntity.ok(responseData);
-//    }
+    @PostMapping
+    public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
+        ResponseData<User> responseData = new ResponseData<>();
+
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                responseData.getMessage().add(error.getDefaultMessage());
+            }
+            responseData.setStatus(false);
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.setPayload(userService.create(user));
+        return ResponseEntity.ok(responseData);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseData<User>> update(@Valid @RequestBody User user, @PathVariable Long id,
@@ -65,22 +65,67 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findById(@PathVariable("id") Long id) {
-        return userService.findById(id);
+    public ResponseEntity<ResponseData<User>> findById(@PathVariable("id") Long id) {
+        ResponseData<User> responseData = new ResponseData<>();
+
+        User user = userService.findById(id); // Call the service to find the user
+        if (user == null) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("User not found"); // Add a custom message
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.getMessage().add("User found successfully"); // Optional success message
+        responseData.setPayload(user);
+        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping
-    public Iterable<User> findAll() {
-        return userService.findAll();
+    public ResponseEntity<ResponseData<Iterable<User>>> findAll() {
+        ResponseData<Iterable<User>> responseData = new ResponseData<>();
+        Iterable<User> users = userService.findAll();
+
+        if (!users.iterator().hasNext()) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("No users found");
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.getMessage().add("Users retrieved successfully");
+        responseData.setPayload(users);
+        return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseData<Void>> removeById(@PathVariable("id") Long id) {
+        ResponseData<Void> responseData = new ResponseData<>();
+
+        if (userService.findById(id) == null) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("User not found");
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
+
         userService.removeById(id);
+        responseData.setStatus(true);
+        responseData.getMessage().add("User deleted successfully");
+        responseData.setPayload(null);
+        return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping
-    public void removeAll() {
+    public ResponseEntity<ResponseData<Void>> removeAll() {
+        ResponseData<Void> responseData = new ResponseData<>();
+
         userService.removeAll();
+        responseData.setStatus(true);
+        responseData.getMessage().add("All user deleted successfully");
+        responseData.setPayload(null);
+        return ResponseEntity.ok(responseData);
     }
 }

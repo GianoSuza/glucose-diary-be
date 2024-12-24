@@ -64,8 +64,21 @@ public class FoodController {
     }
 
     @GetMapping("/{id}")
-    public Food findById(@PathVariable("id") Long id) {
-        return foodService.findById(id);
+    public ResponseEntity<ResponseData<Food>> findById(@PathVariable("id") Long id) {
+        ResponseData<Food> responseData = new ResponseData<>();
+
+        Food food = foodService.findById(id); // Call the service to find the user
+        if (food == null) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Food not found"); // Add a custom message
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.getMessage().add("Food found successfully"); // Optional success message
+        responseData.setPayload(food);
+        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping

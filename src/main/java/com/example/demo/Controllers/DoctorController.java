@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ResponseData;
 import com.example.demo.Models.Doctor;
+import com.example.demo.Models.User;
 import com.example.demo.Services.DoctorService;
 
 import jakarta.validation.Valid;
@@ -64,8 +65,21 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    public Doctor findById(@PathVariable("id") Long id) {
-        return doctorService.findById(id);
+    public ResponseEntity<ResponseData<Doctor>> findById(@PathVariable("id") Long id) {
+        ResponseData<Doctor> responseData = new ResponseData<>();
+
+        Doctor doctor = doctorService.findById(id); // Call the service to find the user
+        if (doctor == null) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Doctor not found"); // Add a custom message
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.getMessage().add("Doctor found successfully"); // Optional success message
+        responseData.setPayload(doctor);
+        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping

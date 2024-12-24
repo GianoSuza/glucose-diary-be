@@ -1,6 +1,8 @@
 package com.example.demo.Services;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,9 +58,10 @@ public class FoodRecordService {
     }
 
     public List<FoodRecord> getWeekData() {
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = endDate.minusDays(7);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date oneWeekAgo = calendar.getTime();
 
-        return foodRecordRepository.findAllFromLastWeek(startDate, endDate);
+        return foodRecordRepository.findAllWithinOneWeek(oneWeekAgo);
     }
 }
