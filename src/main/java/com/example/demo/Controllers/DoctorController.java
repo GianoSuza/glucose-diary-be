@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ResponseData;
 import com.example.demo.Models.Doctor;
-import com.example.demo.Models.User;
 import com.example.demo.Services.DoctorService;
 
 import jakarta.validation.Valid;
@@ -83,17 +82,36 @@ public class DoctorController {
     }
 
     @GetMapping
-    public Iterable<Doctor> findAll() {
-        return doctorService.findAll();
+    public ResponseEntity<ResponseData<Iterable<Doctor>>> findAll() {
+        ResponseData<Iterable<Doctor>> responseData = new ResponseData<>();
+        responseData.setStatus(true);
+        responseData.setPayload(doctorService.findAll());
+        responseData.getMessage().add("Doctors retrieved successfully");
+        return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(@PathVariable("id") Long id) {
-        doctorService.removeById(id);
+    public ResponseEntity<ResponseData<Void>> removeById(@PathVariable("id") Long id) {
+        ResponseData<Void> responseData = new ResponseData<>();
+
+        try {
+            doctorService.removeById(id);
+            responseData.setStatus(true);
+            responseData.getMessage().add("Doctor removed successfully");
+            return ResponseEntity.ok(responseData);
+        } catch (Exception e) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Doctor not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
     }
 
     @DeleteMapping
-    public void removeAll() {
+    public ResponseEntity<ResponseData<Void>> removeAll() {
+        ResponseData<Void> responseData = new ResponseData<>();
         doctorService.removeAll();
+        responseData.setStatus(true);
+        responseData.getMessage().add("All doctors removed successfully");
+        return ResponseEntity.ok(responseData);
     }
 }

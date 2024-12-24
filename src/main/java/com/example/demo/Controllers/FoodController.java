@@ -82,17 +82,36 @@ public class FoodController {
     }
 
     @GetMapping
-    public Iterable<Food> findAll() {
-        return foodService.findAll();
+    public ResponseEntity<ResponseData<Iterable<Food>>> findAll() {
+        ResponseData<Iterable<Food>> responseData = new ResponseData<>();
+        responseData.setStatus(true);
+        responseData.setPayload(foodService.findAll());
+        responseData.getMessage().add("Foods retrieved successfully");
+        return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(@PathVariable("id") Long id) {
-        foodService.removeById(id);
+    public ResponseEntity<ResponseData<Void>> removeById(@PathVariable("id") Long id) {
+        ResponseData<Void> responseData = new ResponseData<>();
+
+        try {
+            foodService.removeById(id);
+            responseData.setStatus(true);
+            responseData.getMessage().add("Food removed successfully");
+            return ResponseEntity.ok(responseData);
+        } catch (Exception e) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Food not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
     }
 
     @DeleteMapping
-    public void removeAll() {
+    public ResponseEntity<ResponseData<Void>> removeAll() {
+        ResponseData<Void> responseData = new ResponseData<>();
         foodService.removeAll();
+        responseData.setStatus(true);
+        responseData.getMessage().add("All foods removed successfully");
+        return ResponseEntity.ok(responseData);
     }
 }
