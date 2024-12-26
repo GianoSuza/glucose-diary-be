@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(customUserDetailsService)  // Use CustomUserDetailsService
+                .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder())
                 .and()
                 .build();
@@ -37,27 +37,35 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/register").permitAll() // Allow registration without authentication
-                .anyRequest().authenticated() // Protect all other endpoints
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.setContentType("application/json");
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Return 401 Unauthorized
-                    response.getWriter().write("{\"error\": \"Unauthorized. Please log in.\"}");
-                })
-                .and()
-                .formLogin()
-                .loginProcessingUrl("/login")
-                .successHandler(authenticationSuccessHandler)
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/logout") // Specify the logout URL
-                .invalidateHttpSession(true)  // Invalidate session
-                .deleteCookies("JSESSIONID"); // Delete session cookies
+        http
+                .csrf().disable()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/register", "/login", "/error").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(exc -> exc
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"error\": \"Unauthorized. Please log in.\"}");
+                        })
+                )
+                .formLogin(form -> form
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")  // Specify the expected username field
+                        .passwordParameter("password")  // Specify the expected password field
+                        .successHandler(authenticationSuccessHandler)
+                        .failureHandler((request, response, exception) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"error\": \"Invalid credentials\"}");
+                        })
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
 
         return http.build();
     }
