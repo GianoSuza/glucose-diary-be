@@ -62,4 +62,15 @@ public class UserService {
     public void removeAll() {
         userRepository.deleteAll();
     }
+
+    public Object login(String username, String rawPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+            return user;
+        } else {
+            return "Invalid username or password";
+        }
+    }
 }
