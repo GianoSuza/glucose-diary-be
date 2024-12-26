@@ -1,9 +1,6 @@
 package com.example.demo.Models;
 
 import java.io.Serializable;
-import java.util.List;
-
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,17 +24,18 @@ public class Doctor implements Serializable {
     @NotEmpty(message = "Speciality is required")
     private String speciality;
 
-    @ElementCollection
-    private List<String> practiceDay;
+    @NotEmpty(message = "Practice day is required")
+    private String practiceDay;
 
-    public Doctor(Long doctorId, @NotEmpty(message = "Doctor name is required") String name,
-            @NotEmpty(message = "Email is required") String email,
-            @NotEmpty(message = "Speciality is required") String speciality, List<String> practiceDay) {
+    private String images;
+
+    public Doctor(Long doctorId, String name, String email, String speciality, String practiceDay, String images) {
         this.doctorId = doctorId;
         this.name = name;
         this.email = email;
         this.speciality = speciality;
         this.practiceDay = practiceDay;
+        this.images = images;
     }
 
     public Doctor() {
@@ -75,11 +73,19 @@ public class Doctor implements Serializable {
         this.speciality = speciality;
     }
 
-    public List<String> getPracticeDay() {
+    public String getPracticeDay() {
         return practiceDay;
     }
 
-    public void setPracticeDay(List<String> practiceDay) {
+    public void setPracticeDay(String practiceDay) {
         this.practiceDay = practiceDay;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 }

@@ -26,21 +26,23 @@ public class Food implements Serializable {
     @NotNull(message = "Sugar level is required")
     private double sugarLevel;
 
-    public Food(Long foodID, @NotEmpty(message = "Food name is required") String name,
-            @NotEmpty(message = "Sugar level is required") double sugarLevel) {
+    private String images;
+
+    public Food(Long foodID, String name, double sugarLevel, String images) {
         this.foodID = foodID;
         this.name = name;
         this.sugarLevel = sugarLevel;
+        this.images = images;
     }
 
     public Food() {
     }
 
-    public Long getFoodID() {
+    public Long getfoodID() {
         return foodID;
     }
 
-    public void setFoodID(Long foodID) {
+    public void setfoodID(Long foodID) {
         this.foodID = foodID;
     }
 
@@ -60,4 +62,11 @@ public class Food implements Serializable {
         this.sugarLevel = sugarLevel;
     }
 
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
+    }
 }

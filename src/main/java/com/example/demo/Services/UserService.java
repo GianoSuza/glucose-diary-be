@@ -36,6 +36,7 @@ public class UserService {
                     user.setEmail(newUser.getEmail());
                     user.setDateBirth(newUser.getDateBirth());
                     user.setGender(newUser.getGender());
+                    user.setImages(newUser.getImages());
                     return userRepository.save(user);
                 })
                 .orElseGet(() -> {

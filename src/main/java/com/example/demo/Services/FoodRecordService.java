@@ -1,5 +1,8 @@
 package com.example.demo.Services;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +54,13 @@ public class FoodRecordService {
 
     public void removeAll() {
         foodRecordRepository.deleteAll();
+    }
+
+    public List<FoodRecord> getWeekData() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date oneWeekAgo = calendar.getTime();
+
+        return foodRecordRepository.findAllWithinOneWeek(oneWeekAgo);
     }
 }

@@ -64,22 +64,54 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    public Doctor findById(@PathVariable("id") Long id) {
-        return doctorService.findById(id);
+    public ResponseEntity<ResponseData<Doctor>> findById(@PathVariable("id") Long id) {
+        ResponseData<Doctor> responseData = new ResponseData<>();
+
+        Doctor doctor = doctorService.findById(id);
+        if (doctor == null) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Doctor not found");
+            responseData.setPayload(null);
+            return ResponseEntity.status(HttpStatus.OK).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.getMessage().add("Doctor found successfully");
+        responseData.setPayload(doctor);
+        return ResponseEntity.ok(responseData);
     }
 
     @GetMapping
-    public Iterable<Doctor> findAll() {
-        return doctorService.findAll();
+    public ResponseEntity<ResponseData<Iterable<Doctor>>> findAll() {
+        ResponseData<Iterable<Doctor>> responseData = new ResponseData<>();
+        responseData.setStatus(true);
+        responseData.setPayload(doctorService.findAll());
+        responseData.getMessage().add("Doctors retrieved successfully");
+        return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping("/{id}")
-    public void removeById(@PathVariable("id") Long id) {
-        doctorService.removeById(id);
+    public ResponseEntity<ResponseData<Void>> removeById(@PathVariable("id") Long id) {
+        ResponseData<Void> responseData = new ResponseData<>();
+
+        try {
+            doctorService.removeById(id);
+            responseData.setStatus(true);
+            responseData.getMessage().add("Doctor removed successfully");
+            return ResponseEntity.ok(responseData);
+        } catch (Exception e) {
+            responseData.setStatus(false);
+            responseData.getMessage().add("Doctor not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
     }
 
     @DeleteMapping
-    public void removeAll() {
+    public ResponseEntity<ResponseData<Void>> removeAll() {
+        ResponseData<Void> responseData = new ResponseData<>();
         doctorService.removeAll();
+        responseData.setStatus(true);
+        responseData.getMessage().add("All doctors removed successfully");
+        return ResponseEntity.ok(responseData);
     }
 }

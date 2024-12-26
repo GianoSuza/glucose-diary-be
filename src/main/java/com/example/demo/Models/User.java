@@ -33,14 +33,19 @@ public class User extends Account {
     @Column(length = 100)
     private String gender;
 
+    @Column
+    private String images;
+
     public User() {
     }
 
-    public User(Long userId, String email, Date dateBirth, String gender) {
+    public User(String username, String password, Long userId, String email, Date dateBirth, String gender, String images) {
+        super(username, password);
         this.userId = userId;
         this.email = email;
         this.dateBirth = dateBirth;
         this.gender = gender;
+        this.images = images;
     }
 
     public Long getUserId() {
@@ -73,5 +78,13 @@ public class User extends Account {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 }
