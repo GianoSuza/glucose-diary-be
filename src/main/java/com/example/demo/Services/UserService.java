@@ -32,7 +32,7 @@ public class UserService {
         return userRepository.findById(id)
                 .map(user -> {
                     user.setUsername(newUser.getUsername());
-                    user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+                    user.setPassword(newUser.getPassword());
                     user.setEmail(newUser.getEmail());
                     user.setDateBirth(newUser.getDateBirth());
                     user.setGender(newUser.getGender());
@@ -62,5 +62,16 @@ public class UserService {
 
     public void removeAll() {
         userRepository.deleteAll();
+    }
+
+    public Object login(String username, String rawPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+            return user;
+        } else {
+            return "Invalid username or password";
+        }
     }
 }
