@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.Models.AdminFood;
 
+import java.util.Optional;
+
 @Repository
 public interface AdminFoodRepository extends JpaRepository<AdminFood, Long> {
-
+    Optional<AdminFood> findByUsername(String username);
 }
