@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Models.Food;
+import com.example.demo.Repositories.FoodRecordRepository;
 import com.example.demo.Repositories.FoodRepository;
 
 import jakarta.transaction.Transactional;
@@ -15,6 +16,9 @@ import jakarta.transaction.Transactional;
 public class FoodService {
     @Autowired
     private FoodRepository foodRepository;
+
+    @Autowired
+    private FoodRecordRepository foodRecordRepository;
 
     public Food create(Food Food) {
         return foodRepository.save(Food);
@@ -46,6 +50,8 @@ public class FoodService {
     }
 
     public void removeById(Long id) {
+        foodRecordRepository.deleteAllByFoodId(id);
+
         foodRepository.deleteById(id);
     }
 

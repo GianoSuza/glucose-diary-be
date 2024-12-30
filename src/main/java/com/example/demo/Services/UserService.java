@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Models.User;
+import com.example.demo.Repositories.BookDoctorRepository;
+import com.example.demo.Repositories.FoodRecordRepository;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,6 +18,12 @@ import jakarta.transaction.Transactional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FoodRecordRepository foodRecordRepository;
+
+    @Autowired
+    private BookDoctorRepository bookDoctorRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -57,6 +65,9 @@ public class UserService {
     }
 
     public void removeById(Long id) {
+        foodRecordRepository.deleteAllByUserId(id);
+        bookDoctorRepository.deleteAllByUserId(id);
+
         userRepository.deleteById(id);
     }
 

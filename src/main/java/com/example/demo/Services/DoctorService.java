@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Models.Doctor;
+import com.example.demo.Repositories.BookDoctorRepository;
 import com.example.demo.Repositories.DoctorRepository;
 
 import jakarta.transaction.Transactional;
@@ -13,6 +14,9 @@ import jakarta.transaction.Transactional;
 public class DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private BookDoctorRepository bookDoctorRepository;
 
     public Doctor create(Doctor doctor) {
         return doctorRepository.save(doctor);
@@ -42,6 +46,8 @@ public class DoctorService {
     }
 
     public void removeById(Long id) {
+        bookDoctorRepository.deleteAllByDoctorId(id);
+
         doctorRepository.deleteById(id);
     }
 
