@@ -8,9 +8,9 @@ import com.example.demo.Models.BookDoctor;
 
 @Repository
 public interface BookDoctorRepository extends JpaRepository<BookDoctor, Long> {
-    @Query("DELETE FROM BookDoctor f WHERE f.user.userId = :userId")
+    @Query("DELETE FROM BookDoctor f WHERE f.user_user_id = :userId")
     void deleteAllByUserId(Long userId);
 
-    @Query("DELETE FROM BookDoctor f WHERE f.doctor.doctorId = :doctorId")
+    @Query("DELETE FROM BookDoctor f WHERE f.doctor_doctor_id = :doctorId")
     void deleteAllByDoctorId(Long doctorId);
 }
