@@ -50,7 +50,7 @@ public class FoodService {
     }
 
     public void removeById(Long id) {
-        foodRecordRepository.deleteAllByFoodId(id);
+        foodRecordRepository.deleteAllByFood_FoodID(id);
 
         foodRepository.deleteById(id);
     }

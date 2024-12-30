@@ -10,12 +10,12 @@ import com.example.demo.Models.FoodRecord;
 
 @Repository
 public interface FoodRecordRepository extends JpaRepository<FoodRecord, Long> {
+    // @Query("DELETE FROM FoodRecord f WHERE f.user_user_id = :userId")
+    void deleteAllByUser_UserId(Long userId);
+
+    // @Query("DELETE FROM FoodRecord f WHERE f.food_foodid = :foodId")
+    void deleteAllByFood_FoodID(Long foodId);
+
     @Query("SELECT f FROM FoodRecord f WHERE f.recordDate >= :startDate")
     List<FoodRecord> findAllWithinOneWeek(Date startDate);
-
-    @Query("DELETE FROM FoodRecord f WHERE f.user_user_id = :userId")
-    void deleteAllByUserId(Long userId);
-
-    @Query("DELETE FROM FoodRecord f WHERE f.food_foodid = :foodId")
-    void deleteAllByFoodId(Long foodId);
 }

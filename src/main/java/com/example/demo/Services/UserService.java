@@ -65,8 +65,8 @@ public class UserService {
     }
 
     public void removeById(Long id) {
-        foodRecordRepository.deleteAllByUserId(id);
-        bookDoctorRepository.deleteAllByUserId(id);
+        foodRecordRepository.deleteAllByUser_UserId(id);
+        bookDoctorRepository.deleteAllByUser_UserId(id);
 
         userRepository.deleteById(id);
     }

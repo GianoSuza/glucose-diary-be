@@ -46,7 +46,7 @@ public class DoctorService {
     }
 
     public void removeById(Long id) {
-        bookDoctorRepository.deleteAllByDoctorId(id);
+        bookDoctorRepository.deleteAllByDoctor_DoctorId(id);
 
         doctorRepository.deleteById(id);
     }
